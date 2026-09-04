@@ -1,0 +1,210 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Greenhouse Orders</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="topbar">
+    <div>
+      <p class="eyebrow">GREENHOUSE OPERATIONS</p>
+      <h1>Order management</h1>
+    </div>
+    <div class="header-actions">
+      <span class="sync-dot"></span><span>Saved on this device</span>
+      <button class="secondary" id="exportBtn">Export orders</button>
+      <button class="primary" id="newOrderBtn">New order</button>
+    </div>
+  </header>
+
+  <main class="shell">
+    <nav class="side-nav" aria-label="Main navigation">
+      <button class="nav-item active" data-view="dashboard">Dashboard</button>
+      <button class="nav-item" data-view="greenhouse">Greenhouse view</button>
+      <button class="nav-item" data-view="orders">All orders</button>
+      <button class="nav-item" data-view="customerHub">Customer Hub</button>
+      <button class="nav-item" data-view="inventoryHub">Inventory Hub</button>
+      <button class="nav-item" data-view="statusBoard">Order status board</button>
+      <button class="nav-item" data-view="trucks">Trucks & logistics</button>
+      <div class="nav-label">CUSTOMERS</div>
+      <button class="nav-item customer-link" data-view="orders" data-customer="Sobeys">Sobeys</button>
+      <button class="nav-item customer-link" data-view="orders" data-customer="Food Basics">Food Basics</button>
+      <button class="nav-item customer-link" data-view="orders" data-customer="Foodland">Foodland</button>
+      <button class="nav-item customer-link" data-view="orders" data-customer="FreshCo">FreshCo</button>
+      <button class="nav-item customer-link" data-view="orders" data-customer="Canadian Tire">Canadian Tire</button>
+      <button class="nav-item" data-view="setup">Microsoft 365 setup</button>
+    </nav>
+
+    <section class="content">
+      <section id="dashboard" class="view active">
+        <div class="page-heading"><div><h2>Dashboard</h2><p>Today’s order activity and near-term work.</p></div><div id="todayLabel"></div></div>
+        <div class="metrics" id="metrics"></div>
+        <section class="panel">
+          <div class="section-heading"><div><h3>Orders by customer</h3><p>Active production quantity by customer.</p></div></div>
+          <div class="customer-summary" id="customerSummary"></div>
+        </section>
+        <section class="panel"><div class="section-heading"><div><h3>Next 7 days</h3><p>Active orders due soon.</p></div><button class="text-button" data-go="greenhouse">Open greenhouse view</button></div><div id="upcomingOrders"></div></section>
+      </section>
+
+      <section id="greenhouse" class="view">
+        <div class="page-heading"><div><h2>Greenhouse view</h2><p>Production list. Cancelled orders are automatically excluded.</p></div><button class="primary" data-new-order>New order</button></div>
+        <div class="notice green">Use the filters to prepare work by delivery date, customer, or status.</div>
+        <div class="filters"><input id="greenhouseDeliveryDate" type="date" title="Delivery / pickup date"><input id="greenhouseSearch" type="search" placeholder="Search order, product, variety, or customer"><select id="greenhouseStatus"><option value="">All statuses</option></select></div>
+        <section class="panel"><div class="section-heading"><div><h3>Product overview</h3><p id="greenhouseOverviewLabel">Carts required by product for the selected delivery date.</p></div></div><div id="greenhouseProductOverview" class="customer-summary"></div></section>
+        <div class="table-wrap"><table><thead><tr><th>Due</th><th>Customer</th><th>Order</th><th>Product</th><th>Variety</th><th>Pot</th><th class="number">Qty</th><th>Status</th></tr></thead><tbody id="greenhouseTable"></tbody></table></div>
+      </section>
+
+      <section id="orders" class="view">
+        <div class="page-heading"><div><h2 id="ordersTitle">All orders</h2><p>Enter and maintain customer orders. One order line per product and variety.</p></div><div><button class="secondary" id="showCancelledBtn">Cancelled orders</button><button class="primary" data-new-order>New order</button></div></div>
+        <div class="filters"><select id="customerFilter"><option value="">All customers</option></select><select id="statusFilter"><option value="">All statuses</option></select><select id="salesWeekFilter"><option value="">All sales weeks</option></select><input id="deliveryDateFilter" type="date" title="Delivery / pickup date"><input id="orderSearch" type="search" placeholder="Search order, product, variety, or contact"></div>
+        <div class="table-wrap"><table><thead><tr><th>Customer</th><th>Store</th><th>Order number</th><th>Order date</th><th>Due</th><th>Sales week</th><th>SKU</th><th>Product / variety</th><th>Pot</th><th>Carts / pots</th><th>Contact</th><th>Sales rep</th><th>Status</th><th></th></tr></thead><tbody id="ordersTable"></tbody></table></div>
+      </section>
+
+      <section id="customerHub" class="view">
+        <div class="page-heading"><div><h2>Customer Hub</h2><p>Customer follow-up, weekly ads, store records, and product catalogue.</p></div></div>
+        <div class="setup-grid">
+          <article class="panel"><h3>No-order call list</h3><p>Find stores that have not placed an order for a selected sales week.</p><button class="primary" data-go="noOrderCalls">Open call list</button></article>
+          <article class="panel"><h3>Small-order call list</h3><p>Follow up with stores ordering fewer than 3 carts.</p><button class="primary" data-go="smallOrders">Open call list</button></article>
+          <article class="panel"><h3>Store ads & specials</h3><p>Plan editable weekly ad lines and create store orders directly from them.</p><button class="primary" data-go="storeAds">Open ads & specials</button></article>
+          <article class="panel"><h3>Store catalogue</h3><p>Maintain store contacts and delivery locations.</p><button class="primary" data-go="storeCatalog">Open store catalogue</button></article>
+        </div>
+      </section>
+
+      <section id="noOrderCalls" class="view">
+        <div class="page-heading"><div><h2>No-order call list</h2><p>Stores with no active order for the selected sales week.</p></div></div>
+        <div class="notice amber">Use this list to call stores that have not ordered. Prior-week carts show who ordered last week but has not yet ordered this week.</div>
+        <div class="filters"><select id="noOrderWeekFilter"></select></div>
+        <div class="table-wrap"><table><thead><tr><th>Customer</th><th>Store</th><th>Customer contact</th><th>Phone / email</th><th>Prior-week carts</th><th>Call action</th></tr></thead><tbody id="noOrderCallsTable"></tbody></table></div>
+      </section>
+
+      <section id="smallOrders" class="view">
+        <div class="page-heading"><div><h2>Small-order call list</h2><p>Stores with active orders below 3 carts for the selected sales week.</p></div></div>
+        <div class="notice amber">Use this list to follow up on orders that may need to be increased before production and delivery planning.</div>
+        <div class="filters"><select id="smallOrderWeekFilter"></select></div>
+        <div class="table-wrap"><table><thead><tr><th>Customer</th><th>Store</th><th>Customer contact</th><th>Sales week</th><th>Carts ordered</th><th>Partial pots</th><th>Call action</th></tr></thead><tbody id="smallOrdersTable"></tbody></table></div>
+      </section>
+
+      <section id="statusBoard" class="view">
+        <div class="page-heading"><div><h2>Order status board</h2><p>Drag an order card into New, Confirmed, or Cancelled to update its status.</p></div></div>
+        <div class="notice green">Cancelled orders are removed from Greenhouse View immediately. Add a cancellation reason by editing the order notes if needed.</div>
+        <div class="kanban" id="statusBoardColumns"></div>
+      </section>
+
+      <section id="cancelled" class="view">
+        <div class="page-heading"><div><h2>Cancelled orders</h2><p>Historical record of stopped order lines.</p></div></div>
+        <div class="notice red">Treat cancellation messages as stop-work notices. Check notes before discarding or reallocating material.</div>
+        <div class="table-wrap"><table><thead><tr><th>Cancelled</th><th>Customer</th><th>Order</th><th>Product</th><th>Qty</th><th>Due</th><th>Changed by</th><th>Notes</th></tr></thead><tbody id="cancelledTable"></tbody></table></div>
+      </section>
+
+      <section id="contactDetails" class="view">
+        <div class="page-heading"><div><h2>Contact details</h2><p>Store delivery and customer contact information.</p></div><button class="secondary" data-go="orders">Back to orders</button></div>
+        <section class="panel" id="contactDetailsPanel"></section>
+      </section>
+
+      <section id="trucks" class="view">
+        <div class="page-heading"><div><h2>Trucks & logistics</h2><p>Assign order lines to a truck and confirm daily delivery loads.</p></div><button class="primary" id="newTruckBtn">Add truck</button></div>
+        <div class="notice green">Set the delivery date, then use Edit on an order to assign it to a truck. The load totals update automatically.</div>
+        <div class="filters"><input id="truckDateFilter" type="date" title="Delivery / pickup date"><select id="truckFilter"><option value="">All trucks</option></select></div>
+        <section class="panel"><div class="section-heading"><div><h3>Truck loads</h3><p>Drag awaiting orders onto a truck. Double-click a truck box to edit its route or details.</p></div></div><div id="truckLoads"></div></section>
+        <section class="panel"><div class="section-heading"><div><h3>Orders awaiting truck assignment</h3><p>Active orders due on the selected date that have no truck.</p></div></div><div id="unassignedTruckOrders"></div></section>
+      </section>
+
+      <section id="cartOrders" class="view">
+        <div class="page-heading"><div><h2>Cart orders</h2><p>Daily carts ordered from growers.</p></div><button class="primary" id="newCartOrderBtn">Add cart order</button></div>
+        <div class="filters"><input id="cartOrderDateFilter" type="date" title="Delivery date"><select id="cartGrowerFilter"><option value="">All growers</option></select></div>
+        <section class="panel"><div class="section-heading"><div><h3>Cart totals</h3><p id="cartOrderSummary">Filter by delivery date to review the day’s grower orders.</p></div></div><div id="cartOrderTotals" class="customer-summary"></div></section>
+        <div class="table-wrap"><table><thead><tr><th>Delivery date</th><th>Grower</th><th class="number">Carts</th><th>Ordered by</th><th>Notes</th><th></th></tr></thead><tbody id="cartOrdersTable"></tbody></table></div>
+      </section>
+
+      <section id="rackPacks" class="view">
+        <div class="page-heading"><div><h2>Rack packs</h2><p>Define pots per cart and price per pot for each SKU.</p></div><button class="primary" id="newRackPackBtn">Add rack pack</button></div>
+        <div class="filters"><input id="rackPackSearch" type="search" placeholder="Search SKU, item number, or product"></div>
+        <div class="table-wrap"><table><thead><tr><th>SKU</th><th>Item number</th><th>Product</th><th class="number">Pots / cart</th><th class="number">Price / pot</th><th class="number">Cart value before tax</th><th></th></tr></thead><tbody id="rackPacksTable"></tbody></table></div>
+      </section>
+
+      <section id="storeAds" class="view">
+        <div class="page-heading"><div><h2>Canadian Tire store ads & specials</h2><p>Grower weeks 33–38 · editable promotional order sheet.</p></div><button class="primary" id="newStoreAdBtn">Add ad row</button></div>
+        <div class="notice green"><strong>How it works:</strong> Choose a Canadian Tire store and enter the rack quantity. The order is created automatically. Later edits to the row update that same order.</div>
+        <div class="ad-toolbar">
+          <div class="filters"><input id="storeAdSearch" type="search" placeholder="Search item, article, UPC, or description"><select id="storeAdStoreFilter"><option value="">All grower weeks</option></select></div>
+          <span class="auto-order-note">Orders save automatically</span>
+        </div>
+        <section class="ad-store-picker" aria-label="Order destination">
+          <label class="store-combobox">Canadian Tire store<input id="activeAdStoreSearch" type="search" autocomplete="off" placeholder="Search by store number or city…"><select id="activeAdStoreSelect"><option value="">Choose a Canadian Tire store…</option></select></label>
+          <label>Contact information<input id="activeAdStoreContact" placeholder="Select a store to load its contact information"></label>
+          <input type="hidden" id="activeAdStoreId">
+          <span id="activeAdStoreStatus">Choose a store before entering quantities.</span>
+        </section>
+        <div class="table-wrap ad-sheet"><table><thead><tr><th>Grower<br>Week</th><th>Ad<br>Week</th><th>Item #</th><th>Article</th><th>UPC</th><th>Description</th><th class="number">Units<br>/ Cart</th><th class="number">Cost<br>Price</th><th class="number">Retail</th><th class="number">Margin</th><th>Ad Information</th><th class="number">Quantity<br>Ordered</th><th>Notes</th><th class="number">Cost</th><th>Order</th><th></th></tr></thead><tbody id="storeAdsTable"></tbody></table></div>
+      </section>
+
+      <section id="storeCatalog" class="view">
+        <div class="page-heading"><div><h2>Store catalogue</h2><p>Maintain store contacts and delivery locations.</p></div><button class="primary" id="newStoreBtn">Add store</button></div>
+        <div class="notice green">Double-click a store, or select Edit, to add or update its delivery address and contacts.</div>
+        <div class="filters"><input id="storeSearch" type="search" placeholder="Search customer, store, address, or contact"></div>
+        <div class="table-wrap"><table><thead><tr><th>Customer</th><th>Store #</th><th>Store / location</th><th>Address</th><th>Customer contact</th><th>Receiving contacts</th><th></th></tr></thead><tbody id="storesTable"></tbody></table></div>
+      </section>
+
+      <section id="inventoryHub" class="view">
+        <div class="page-heading"><div><h2>Inventory Hub</h2><p>Maintain the products, SKUs, and item numbers available for order entry.</p></div><button class="primary" id="newProductBtn">Add product</button></div>
+        <div class="notice green">Double-click a product, or select Edit, to update its catalogue details.</div>
+        <div class="setup-grid">
+          <article class="panel"><h3>Cart orders</h3><p>Order carts from growers and review daily grower totals.</p><button class="primary" data-go="cartOrders">Open cart orders</button></article>
+          <article class="panel"><h3>Rack packs</h3><p>Set pots per cart and price per pot for each SKU.</p><button class="primary" data-go="rackPacks">Open rack packs</button></article>
+        </div>
+        <div class="section-heading"><div><h3>Product catalogue</h3><p>Products, SKUs, item numbers, varieties, and pot sizes.</p></div></div>
+        <div class="filters"><input id="productSearch" type="search" placeholder="Search SKU, item number, product, variety, or pot"></div>
+        <div class="table-wrap"><table><thead><tr><th>SKU</th><th>Item number</th><th>Product</th><th>Variety</th><th>Pot size</th><th></th></tr></thead><tbody id="productsTable"></tbody></table></div>
+      </section>
+
+      <section id="setup" class="view">
+        <div class="page-heading"><div><h2>Microsoft 365 setup</h2><p>Recommended production deployment.</p></div></div>
+        <div class="setup-grid">
+          <article class="panel"><h3>1. Host the app</h3><p>Deploy this site to Azure Static Web Apps or SharePoint Framework. Store orders in a SharePoint List or Dataverse table, not browser storage.</p></article>
+          <article class="panel"><h3>2. Sign in</h3><p>Use Microsoft Entra ID so sales staff and greenhouse staff use their normal Microsoft 365 accounts. Give sales edit access and greenhouse view access.</p></article>
+          <article class="panel"><h3>3. Cancel alerts</h3><p>Create a Power Automate flow: when an order’s Status changes to <strong>Cancelled</strong>, post in the greenhouse Teams channel and send the distribution list an email.</p><p>Include customer, store number, address, order number, SKU, product, carts, partial-cart pots, due date, Changed By, and notes.</p></article>
+          <article class="panel"><h3>4. Avoid conflicts</h3><p>Use a single central SharePoint List/Dataverse table. The app filters that list by customer, which removes the need for emailed files or duplicated spreadsheets.</p></article>
+        </div>
+      </section>
+    </section>
+  </main>
+
+  <dialog id="orderDialog"><form method="dialog" id="orderForm">
+    <div class="dialog-head"><div><h2 id="dialogTitle">New order</h2><p>Fields marked with * are required.</p></div><button class="icon-button" type="button" id="closeDialog" aria-label="Close">×</button></div>
+    <input type="hidden" id="recordId" name="recordId">
+    <div class="form-grid">
+      <label>Store *<select id="storeId" name="storeId" required></select></label>
+      <label>Order number *<input id="orderNumber" name="orderNumber" required></label>
+      <label>Order date *<input id="orderDate" name="orderDate" type="date" required></label>
+      <label>Delivery / pickup date *<input id="dueDate" name="dueDate" type="date" required></label>
+      <label>Truck<select id="truckId" name="truckId"></select></label>
+      <label>SKU *<select id="sku" name="sku" required></select></label>
+      <label>Product<input id="product" name="product" readonly></label>
+      <label>Variety<input id="variety" name="variety" readonly></label>
+      <label>Pot size<input id="potSize" name="potSize" readonly></label>
+      <label>Carts<input id="carts" name="carts" type="number" min="0" step="0.5" value="0"></label>
+      <label>Pots (partial cart)<input id="pots" name="pots" type="number" min="0" step="1" value="0"></label>
+      <label>Rack pack<input id="rackPackInfo" readonly></label>
+      <label>Subtotal<input id="orderSubtotal" readonly></label>
+      <label>HST (13%)<input id="orderTax" readonly></label>
+      <label>Order total<input id="orderTotal" readonly></label>
+      <label>Customer contact<input id="contact" name="contact" readonly></label>
+      <label>Sales rep<input id="salesRep" name="salesRep"></label>
+      <label>Changed by *<input id="changedBy" name="changedBy" required placeholder="Your name"></label>
+       <label class="span-2">Notes<textarea id="notes" name="notes" rows="3" placeholder="Include cancellation reason when applicable"></textarea></label>
+     </div>
+    <section class="additional-items"><div class="section-heading"><div><h3>Additional line items</h3><p>Add another product under this same order number.</p></div><button class="secondary" type="button" id="addOrderLineBtn">Add line item</button></div><div id="additionalLineItems"></div></section>
+    <div class="dialog-actions"><button class="secondary" value="cancel" type="button" id="cancelDialog">Cancel</button><button class="primary" value="default" type="submit">Save order</button></div>
+  </form></dialog>
+  <dialog id="storeDialog"><form method="dialog" id="storeForm"><div class="dialog-head"><div><h2 id="storeDialogTitle">Add store</h2><p>Use one record for each delivery location.</p></div><button class="icon-button" type="button" id="closeStoreDialog">×</button></div><input type="hidden" id="storeRecordId" name="storeRecordId"><div class="form-grid"><label>Customer *<select id="storeCustomer" name="customer" required></select></label><label>Store number *<input id="storeNumber" name="storeNumber" required></label><label>Store / location name<input id="storeName" name="storeName" placeholder="e.g. North York"></label><label class="span-2">Delivery address *<input id="storeAddress" name="address" required placeholder="Street, city, postal code"></label><label>Customer contact<input id="storeCustomerContact" name="customerContact" placeholder="Buyer or ordering contact"></label><label>Receiving contacts *<input id="storeContacts" name="contacts" required placeholder="Names, separated by commas"></label><label>Phone / email<input id="storePhone" name="phone" placeholder="Optional"></label></div><div class="dialog-actions"><button class="secondary" type="button" id="cancelStoreDialog">Cancel</button><button class="primary" type="submit">Save store</button></div></form></dialog>
+  <dialog id="productDialog"><form method="dialog" id="productForm"><div class="dialog-head"><div><h2 id="productDialogTitle">Add product</h2><p>SKU details appear automatically on new orders.</p></div><button class="icon-button" type="button" id="closeProductDialog">×</button></div><input type="hidden" id="productRecordId" name="productRecordId"><div class="form-grid"><label>SKU *<input id="productSku" name="sku" required></label><label>Item number *<input id="catalogItemNumber" name="itemNumber" required></label><label>Product *<input id="catalogProduct" name="product" required></label><label>Variety<input id="catalogVariety" name="variety"></label><label>Pot size<input id="catalogPotSize" name="potSize" placeholder="Enter pot size as needed"></label></div><div class="dialog-actions"><button class="secondary" type="button" id="cancelProductDialog">Cancel</button><button class="primary" type="submit">Save product</button></div></form></dialog>
+  <dialog id="truckDialog"><form method="dialog" id="truckForm"><div class="dialog-head"><div><h2 id="truckDialogTitle">Add truck</h2><p>Add the truck or delivery run available for assignments.</p></div><button class="icon-button" type="button" id="closeTruckDialog">×</button></div><input type="hidden" id="truckRecordId" name="truckRecordId"><div class="form-grid"><label>Truck name *<input id="truckName" name="name" required placeholder="e.g. Truck 1"></label><label>Driver / carrier<input id="truckDriver" name="driver" placeholder="Optional"></label><label>Route<input id="truckRoute" name="route" placeholder="e.g. Barrie → Orillia → Collingwood"></label><label>Cart capacity<input id="truckCapacity" name="capacity" type="number" min="0" step="0.5" placeholder="Optional"></label><label class="span-2">Notes<input id="truckNotes" name="notes" placeholder="Optional"></label></div><div class="dialog-actions"><button class="secondary" type="button" id="cancelTruckDialog">Cancel</button><button class="primary" type="submit">Save truck</button></div></form></dialog>
+  <dialog id="cartOrderDialog"><form method="dialog" id="cartOrderForm"><div class="dialog-head"><div><h2 id="cartOrderDialogTitle">Add cart order</h2><p>Record carts ordered from a grower for a delivery day.</p></div><button class="icon-button" type="button" id="closeCartOrderDialog">×</button></div><input type="hidden" id="cartOrderRecordId" name="cartOrderRecordId"><div class="form-grid"><label>Delivery date *<input id="cartOrderDate" name="deliveryDate" type="date" required></label><label>Grower *<select id="cartGrower" name="grower" required></select></label><label>Carts *<input id="cartOrderCarts" name="carts" type="number" min="0.5" step="0.5" required></label><label>Ordered by<input id="cartOrderedBy" name="orderedBy" placeholder="Optional"></label><label class="span-2">Notes<textarea id="cartOrderNotes" name="notes" rows="3" placeholder="Optional"></textarea></label></div><div class="dialog-actions"><button class="secondary" type="button" id="cancelCartOrderDialog">Cancel</button><button class="primary" type="submit">Save cart order</button></div></form></dialog>
+  <dialog id="rackPackDialog"><form method="dialog" id="rackPackForm"><div class="dialog-head"><div><h2 id="rackPackDialogTitle">Add rack pack</h2><p>Set the pot count and price for one SKU.</p></div><button class="icon-button" type="button" id="closeRackPackDialog">×</button></div><input type="hidden" id="rackPackRecordId" name="rackPackRecordId"><div class="form-grid"><label>SKU *<select id="rackPackSku" name="sku" required></select></label><label>Item number<input id="rackPackItemNumber" readonly></label><label>Product<input id="rackPackProduct" readonly></label><label>Pots per cart *<input id="rackPackPots" name="potsPerCart" type="number" min="1" step="1" required placeholder="e.g. 48"></label><label>Price per pot *<input id="rackPackPrice" name="pricePerPot" type="number" min="0" step="0.01" required placeholder="e.g. 3.49"></label></div><div class="dialog-actions"><button class="secondary" type="button" id="cancelRackPackDialog">Cancel</button><button class="primary" type="submit">Save rack pack</button></div></form></dialog>
+  <div id="toast" role="status" aria-live="polite"></div>
+  <script src="app.js"></script>
+</body>
+</html>
+
